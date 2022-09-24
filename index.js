@@ -54,7 +54,14 @@ async function fetchDownloads(str) {
     }
   );
 
-  return Object.entries(data).map(([, { downloads, package }]) => {
+  return Object.entries(data).map((pkg) => {
+    if (pkg[1] === null) {
+      return {
+        package: pkg[0],
+        weekTotal: 0,
+      };
+    }
+    const [, { downloads, package }] = pkg;
     return {
       package,
       weekTotal: downloads.reduce((a, b) => a + b.downloads, 0),
