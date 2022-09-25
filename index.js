@@ -2,7 +2,6 @@ const axios = require("axios").default;
 const names = require("all-the-package-names");
 const fs = require("fs");
 const path = require("path");
-const { exit } = require("process");
 
 async function run() {
   const nonScoped = names.filter((n) => !n.startsWith("@"));
@@ -15,9 +14,13 @@ async function run() {
     chunks.push(nonScoped.slice(i, i + chunkSize));
   }
 
-  const lastChunk = parseInt(
-    fs.readFileSync(path.join(__dirname, "last-chunk-written.txt"))
-  );
+  let lastChunk = fs.existsSync(path.join(__dirname, "last-chunk-written.txt"))
+    ? parseInt(fs.readFileSync(path.join(__dirname, "last-chunk-written.txt")))
+    : 0;
+
+  if (!fs.existsSync(path.join(__dirname, "results"))) {
+    fs.mkdirSync(path.join(__dirname, "results"));
+  }
 
   for (let i = lastChunk; i < chunks.length; i++) {
     const chunk = chunks[i];
@@ -33,8 +36,6 @@ async function run() {
 
     await sleep(1000);
   }
-
-  // let firstNames = names.slice(0, 10);
 }
 
 async function sleep(ms) {
