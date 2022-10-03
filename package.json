@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "all-the-package-names": "^2.0.331",
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "csv-parse": "^5.3.0"
   }
 }
